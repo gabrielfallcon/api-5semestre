@@ -41,8 +41,12 @@ module.exports = {
     const {id} = req.params;
 
     const service = await Service.findById(id);
+    if(!service) {
+      return res.json("Serviço não encontrado verifique o id!");
+    }
 
     const filename = service.imageService;
+    console.log(filename);
     const caminho = path.resolve(__dirname,'..', '..', `uploads/${filename}`);
 
 

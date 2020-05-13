@@ -1,10 +1,16 @@
 const Service = require('../models/Service')
 const User = require('../models/User')
 
+const path = require('path')
+const fs = require('fs')
+
 module.exports = {
   async index(req, res) {
     const listService = await Service.find()
-
+    console.log(listService.length);
+    if(listService.length === 0) {
+      return res.json("Lista de Serviços Vazia");
+    }
     return res.json(listService)
   },
 
@@ -29,5 +35,31 @@ module.exports = {
     })
 
     return res.json(createdService)
+  },
+
+  async destroy(req, res) {
+    const {id} = req.params;
+
+    const service = await Service.findById(id);
+
+    const filename = service.imageService;
+    const caminho = path.resolve(__dirname,'..', '..', `uploads/${filename}`);
+
+
+
+    
+    await Service.deleteOne(service, (err) => {
+      if(err) {
+        req.flash("error", err);
+        return res.json(err);
+      }
+
+      if(fs.existsSync(caminho)) {
+        fs.unlinkSync(caminho);
+      }
+      
+      return res.json("O serviço foi deletado!");
+    });
   }
+
 }

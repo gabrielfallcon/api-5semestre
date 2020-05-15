@@ -6,10 +6,14 @@ module.exports = {
 
     const existsUser = await User.findOne({ cpf: cpf })
 
-    if (!existsUser) {
-      return res.status(400).json({ message: 'Usuário inválido' })
+    if (
+        !existsUser || 
+        existsUser.password !== password || 
+        existsUser.typeuser !== 'admin'
+      ) {
+      return res.json({ message: 'Usuário inválido', status: false })
     }
 
-    return res.status(200).json({ status: true })
+    return res.status(200).json({ status: true, _id: existsUser._id })
   }
 }

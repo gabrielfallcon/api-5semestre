@@ -8,6 +8,14 @@ const ServiceSchema = new mongoose.Schema  ({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   }
+}, {
+  toJSON: {
+    virtuals: true,
+  },
+});
+
+ServiceSchema.virtual('imageService_url').get(function() {
+  return `http://localhost:3333/files/${this.imageService}`
 })
 
 module.exports = mongoose.model('Service', ServiceSchema)

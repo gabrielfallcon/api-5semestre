@@ -5,6 +5,7 @@ const uploadConfig = require('./config/upload');
 const SessionController = require('./controllers/SessionController');
 const UserController = require('./controllers/UserController');
 const ServiceController = require('./controllers/ServiceController');
+const LoginController = require('./controllers/LoginController');
 
 const routes = express.Router();
 const upload = multer(uploadConfig);
@@ -24,4 +25,7 @@ routes.get('/services', ServiceController.index);
 routes.post('/services', upload.single('imageService') , ServiceController.storage);
 routes.delete('/services/:id', ServiceController.destroy);
 
-module.exports = routes
+// Login de Admin 
+routes.post('/login', LoginController.store);
+
+module.exports = routes;

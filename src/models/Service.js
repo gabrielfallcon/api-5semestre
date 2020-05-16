@@ -15,7 +15,7 @@ const ServiceSchema = new mongoose.Schema  ({
 });
 
 ServiceSchema.virtual('imageService_url').get(function() {
-  return `http://localhost:3333/files/${this.imageService}`
+  return `http://192.168.0.26:3333/files/${this.imageService}`
 })
 
 module.exports = mongoose.model('Service', ServiceSchema)

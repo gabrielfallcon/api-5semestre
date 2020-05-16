@@ -26,6 +26,7 @@ routes.post('/services', upload.single('imageService') , ServiceController.stora
 routes.delete('/services/:id', ServiceController.destroy);
 
 // Login de Admin 
-routes.post('/login', LoginController.store);
+routes.post('/loginWeb', LoginController.showAdmin);
+routes.post('/loginApp', LoginController.showUser);
 
 module.exports = routes;

@@ -28,7 +28,9 @@ routes.delete('/services/:id', ServiceController.destroy);
 
 // Cadastro de Chamado
 routes.post('/chamado', upload.single('anexos'), ChamadoController.storage);
+routes.post('/chamado/:id', ChamadoController.update);
 routes.get('/chamado', ChamadoController.index);
+routes.delete('/chamado/:id', ChamadoController.destroy);
 
 // Login de Admin 
 routes.post('/loginWeb', LoginController.showAdmin);

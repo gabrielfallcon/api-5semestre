@@ -48,6 +48,46 @@ module.exports = {
       return res.json("Lista de Chamados Vazia");
     }
     return res.json(listChamado);
-  }
+  },
+
+  async destroy(req, res) {
+    const {id} = req.params;
+
+    const chamado = await Chamado.findById(id);
+    if(!chamado) return res.json("Chamado não encontrado verifique o id!");
+
+    await Chamado.deleteOne(chamado, (err) => {
+      if(err) {
+        req.flash("error", err);
+        return res.json(err);
+      }  
+      return res.json("O chamado foi deletado!");
+    });
+  },
+
+  async update(req, res) {
+    const { id } = req.params
+    const { status } = req.body;
+
+    const chamado = await Chamado.findById(id);
+
+    if(status === 'Em Andamento') {
+      chamado.status = 'Em Andamento'
+      await chamado.save();
+      return res.json(chamado);
+    }
+    else if(status === 'Fechado') {
+      chamado.status = 'Fechado'
+      await chamado.save();
+      return res.json(chamado);
+    }
+
+    return res.json("Status incorreto tente novamente!");
+    
+
+    
+
+
+  },
 
 }

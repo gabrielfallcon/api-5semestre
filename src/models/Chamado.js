@@ -27,7 +27,7 @@ const ChamadoSchema = new mongoose.Schema ({
   },
   status: {
     type: String,
-    enum: ['Aberto', 'Aceito', 'Fechado'],
+    enum: ['Aberto', 'Em Andamento', 'Fechado'],
     required: true
   },
   anexo: []

@@ -6,6 +6,7 @@ const SessionController = require('./controllers/SessionController');
 const UserController = require('./controllers/UserController');
 const ServiceController = require('./controllers/ServiceController');
 const LoginController = require('./controllers/LoginController');
+const ChamadoController = require('./controllers/ChamadoController');
 
 const routes = express.Router();
 const upload = multer(uploadConfig);
@@ -24,6 +25,10 @@ routes.delete('/users/:cpf', UserController.destroy);
 routes.get('/services', ServiceController.index);
 routes.post('/services', upload.single('imageService') , ServiceController.storage);
 routes.delete('/services/:id', ServiceController.destroy);
+
+// Cadastro de Chamado
+routes.post('/chamado', upload.single('anexos'), ChamadoController.storage);
+routes.get('/chamado', ChamadoController.index);
 
 // Login de Admin 
 routes.post('/loginWeb', LoginController.showAdmin);

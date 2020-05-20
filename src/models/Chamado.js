@@ -15,6 +15,7 @@ const ChamadoSchema = new mongoose.Schema ({
     ref: 'Service'
   },
   data: String,
+  titulo: String,
   descricao: String,
   endereco: String,
   lat: {
@@ -31,6 +32,18 @@ const ChamadoSchema = new mongoose.Schema ({
     required: true
   },
   anexo: []
+}, {
+  toJSON: {
+    virtuals: true,
+  },
 });
+
+ChamadoSchema.virtual('anexoUrl').get(function() {
+  const arr = this.anexo;
+  const filename = arr.map(obj => {
+    return `http://192.168.0.26:3333/files/${obj}`
+  });
+  return filename;
+})
 
 module.exports = mongoose.model('Chamado', ChamadoSchema);

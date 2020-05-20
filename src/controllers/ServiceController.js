@@ -13,6 +13,13 @@ module.exports = {
     return res.json(listService)
   },
 
+  async show(req, res) {
+    const { id } = req.params
+    const service = await Service.findById(id);
+    if(!service) return res.status(400).json("Serviço nao encontrado, tente outro id!");
+    return res.json(service);
+  },
+
   async storage(req, res) {
     const { filename } = req.file
     const { name, description } = req.body

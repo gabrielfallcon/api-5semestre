@@ -5,11 +5,19 @@ const Avaliacao = require('../models/Avalicoes');
 
 module.exports = {
   async storage(req, res) {
-    const { filename } = req.file;
+    const file = req.files;
+    
+    // console.log(filename);
+
+    const newFiles = file.map(obj => {
+      return obj.filename
+  });
+    console.log(newFiles);
     const { 
       prestadorId,
       clienteId,
       servicoId,
+      titulo,
       descricao,
       endereco,
       lat,
@@ -29,12 +37,13 @@ module.exports = {
       cliente: clienteId,
       servico: servicoId,
       data: new Date().toString(),
+      titulo: titulo,
       descricao: descricao,
       endereco: endereco,
       lat: lat,
       lon: lon,
       status: 'Aberto',
-      anexo: filename
+      anexo: newFiles
     });
 
     return res.json(createChamado);
@@ -47,6 +56,13 @@ module.exports = {
     if(listChamado.length === 0) {
       return res.json("Lista de Chamados Vazia");
     }
+    return res.json(listChamado);
+  },
+
+  async indexByUser(req, res) {
+    const { id } = req.params;
+    const listChamado = await Chamado.find({cliente: id});
+    if(listChamado.length === 0) return res.json("Nenhum chamado deste cliente encontrado!");
     return res.json(listChamado);
   },
 
@@ -70,6 +86,7 @@ module.exports = {
     const { status } = req.body;
 
     const chamado = await Chamado.findById(id);
+    if(!chamado) return res.status(400).json("Chamado não encontrato, tente outro id!");
 
     if(status === 'Em Andamento') {
       chamado.status = 'Em Andamento'
@@ -82,7 +99,7 @@ module.exports = {
       return res.json(chamado);
     }
 
-    return res.json("Status incorreto tente novamente!");
+    return res.status(400).json("Status incorreto tente novamente!");
     
 
     

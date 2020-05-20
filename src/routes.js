@@ -23,13 +23,15 @@ routes.delete('/users/:cpf', UserController.destroy);
 
 // Cadastro de Servico 
 routes.get('/services', ServiceController.index);
+routes.get('/services/:id', ServiceController.show);
 routes.post('/services', upload.single('imageService') , ServiceController.storage);
 routes.delete('/services/:id', ServiceController.destroy);
 
 // Cadastro de Chamado
-routes.post('/chamado', upload.single('anexos'), ChamadoController.storage);
-routes.post('/chamado/:id', ChamadoController.update);
-routes.get('/chamado', ChamadoController.index);
+routes.post('/chamado', upload.array('anexos', 10), ChamadoController.storage);
+routes.put('/chamado/:id', ChamadoController.update);
+routes.get('/chamados', ChamadoController.index);
+routes.get('/chamados/user/:id', ChamadoController.indexByUser);
 routes.delete('/chamado/:id', ChamadoController.destroy);
 
 // Login de Admin 

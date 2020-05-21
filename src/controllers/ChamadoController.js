@@ -25,12 +25,12 @@ module.exports = {
     } = req.body;
 
     const cliente = await User.findById(clienteId);
-    const prestador = await User.findById(prestadorId);
+    // const prestador = await User.findById(prestadorId);
     const servico = await Service.findById(servicoId);
 
-    if (!cliente || !prestador) return res.status(400).json({message: 'Client or Provider does not exists'});
+    if (!cliente || !servico) return res.status(400).json({message: 'Client or Service does not exists'});
 
-    if (!servico) return res.status(400).json({message: 'Service does not exists'});
+    // if (!servico) return res.status(400).json({message: 'Service does not exists'});
 
     const createChamado = await Chamado.create({
       prestador: prestadorId,
@@ -62,8 +62,22 @@ module.exports = {
   async indexByUser(req, res) {
     const { id } = req.params;
     const listChamado = await Chamado.find({cliente: id});
-    if(listChamado.length === 0) return res.json("Nenhum chamado deste cliente encontrado!");
+    if(listChamado.length === 0) return res.json("Nenhum chamado criado por este cliente foi encontrado!");
     return res.json(listChamado);
+  },
+
+  async indexByProvider(req, res) {
+    const { id } = req.params;
+    const listChamado = await Chamado.find({prestador: id});
+    if(listChamado.length === 0) return res.json("Nenhum chamado aceito por este prestador foi encontrado!");
+    return res.json(listChamado);
+  },
+
+  async show(req, res) {
+    const { id } = req.params;
+    const ticket = await Chamado.findById(id);
+    if(!ticket) return res.json("Nenhum chamado foi encontrado, tente outro id!");
+    return res.json(ticket);
   },
 
   async destroy(req, res) {

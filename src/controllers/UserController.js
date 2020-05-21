@@ -56,4 +56,13 @@ module.exports = {
     }
     return res.json(listUser)
   },
+
+  async show(req, res) {
+    const { id } = req.params;
+    const Usuario = await User.findById(id);
+    if(!Usuario) {
+      return res.json("Usuario não encontrado, tente outro id!");
+    }
+    return res.json(Usuario);
+  },
 }

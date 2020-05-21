@@ -18,6 +18,8 @@ routes.post('/sessions', SessionController.store);
 routes.post('/users', UserController.store);
 // Obtem lista de todos usuarios
 routes.get('/users', UserController.index);
+// Obtem um usuario pelo id
+routes.get('/users/:id', UserController.show);
 //Deletar Usuarios
 routes.delete('/users/:cpf', UserController.destroy);
 
@@ -28,10 +30,12 @@ routes.post('/services', upload.single('imageService') , ServiceController.stora
 routes.delete('/services/:id', ServiceController.destroy);
 
 // Cadastro de Chamado
-routes.post('/chamado', upload.array('anexos', 10), ChamadoController.storage);
+routes.post('/chamado', upload.array('anexos'), ChamadoController.storage);
 routes.put('/chamado/:id', ChamadoController.update);
 routes.get('/chamados', ChamadoController.index);
 routes.get('/chamados/user/:id', ChamadoController.indexByUser);
+routes.get('/chamados/provider/:id', ChamadoController.indexByProvider);
+routes.get('/chamado/:id', ChamadoController.show);
 routes.delete('/chamado/:id', ChamadoController.destroy);
 
 // Login de Admin 

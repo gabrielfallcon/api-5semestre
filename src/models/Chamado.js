@@ -4,7 +4,8 @@ const AvaliacaoSchema = require('./Avalicoes');
 const ChamadoSchema = new mongoose.Schema ({
   prestador: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
+    required: false
   },
   cliente: {
     type: mongoose.Schema.Types.ObjectId,
@@ -17,7 +18,10 @@ const ChamadoSchema = new mongoose.Schema ({
   data: String,
   titulo: String,
   descricao: String,
-  endereco: String,
+  endereco: {
+    type: String,
+    required: false,
+  },
   lat: {
     type: String,
     required: false
@@ -31,7 +35,10 @@ const ChamadoSchema = new mongoose.Schema ({
     enum: ['Aberto', 'Em Andamento', 'Fechado'],
     required: true
   },
-  anexo: []
+  anexo: {
+    type: Array,
+    required: false
+  }
 }, {
   toJSON: {
     virtuals: true,

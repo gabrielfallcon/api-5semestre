@@ -35,6 +35,10 @@ const ChamadoSchema = new mongoose.Schema ({
     enum: ['Aberto', 'Em Andamento', 'Fechado'],
     required: true
   },
+  avaliado: {
+    type: Boolean,
+    required: false
+  },
   anexo: {
     type: Array,
     required: false

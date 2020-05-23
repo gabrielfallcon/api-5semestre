@@ -68,6 +68,37 @@ module.exports = {
       
       return res.json("O serviço foi deletado!");
     });
+  },
+  async update(req, res) {
+    const { id } = req.params;
+    let filename = null;
+    if(req.file !== undefined) {
+      filename = req.file.filename;
+    }
+    const { name, description } = req.body;
+    
+    const srvc = await Service.findById(id);
+
+    const oldFile = srvc.imageService;
+    const caminho = path.resolve(__dirname,'..', '..', `uploads/${oldFile}`);
+
+    if(!srvc)
+      return res.status(400).
+      json("Serviço nao encontrado, tente com outro id!");
+
+    srvc.name = name;
+    srvc.description = description;
+    if(filename) {
+      srvc.imageService = filename;
+      if(fs.existsSync(caminho)) {
+        fs.unlinkSync(caminho);
+      }
+    }
+
+    
+
+    srvc.save();
+    return res.json("Serviço atualizado com sucesso");
   }
 
 }

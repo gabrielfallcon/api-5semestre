@@ -62,21 +62,21 @@ module.exports = {
   async indexByUser(req, res) {
     const { id } = req.params;
     const listChamado = await Chamado.find({cliente: id});
-    if(listChamado.length === 0) return res.json("Nenhum chamado criado por este cliente foi encontrado!");
+    if(listChamado.length === 0) return res.status(400).json("Nenhum chamado criado por este cliente foi encontrado!");
     return res.json(listChamado);
   },
 
   async indexByProvider(req, res) {
     const { id } = req.params;
     const listChamado = await Chamado.find({prestador: id});
-    if(listChamado.length === 0) return res.json("Nenhum chamado aceito por este prestador foi encontrado!");
+    if(listChamado.length === 0) return res.status(400).json({message: "Nenhum chamado aceito ou fechado por este prestador foi encontrado!"});
     return res.json(listChamado);
   },
 
   async show(req, res) {
     const { id } = req.params;
     const ticket = await Chamado.findById(id);
-    if(!ticket) return res.json("Nenhum chamado foi encontrado, tente outro id!");
+    if(!ticket) return res.status(400).json("Nenhum chamado foi encontrado, tente outro id!");
     return res.json(ticket);
   },
 
@@ -84,7 +84,7 @@ module.exports = {
     const {id} = req.params;
 
     const chamado = await Chamado.findById(id);
-    if(!chamado) return res.json("Chamado não encontrado verifique o id!");
+    if(!chamado) return res.status(400).json("Chamado não encontrado verifique o id!");
 
     await Chamado.deleteOne(chamado, (err) => {
       if(err) {
@@ -97,13 +97,14 @@ module.exports = {
 
   async update(req, res) {
     const { id } = req.params
-    const { status } = req.body;
+    const { provider, status } = req.body;
 
     const chamado = await Chamado.findById(id);
     if(!chamado) return res.status(400).json("Chamado não encontrato, tente outro id!");
 
     if(status === 'Em Andamento') {
       chamado.status = 'Em Andamento'
+      chamado.prestador = provider;
       await chamado.save();
       return res.json(chamado);
     }

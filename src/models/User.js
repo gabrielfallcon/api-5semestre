@@ -5,6 +5,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  avaliacao: {
+    type: Array,
+    required: false
+  },
   cpf: String,
   password: String,
   address: String,

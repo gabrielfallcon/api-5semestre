@@ -1,4 +1,5 @@
-const User = require('../models/User')
+const User = require('../models/User');
+const Chamado = require('../models/Chamado');
 
 // index, show, store, update, destroy
 
@@ -50,7 +51,6 @@ module.exports = {
 
   async index(req, res) {
     const listUser = await User.find()
-    console.log(listUser.length);
     if(listUser.length === 0) {
       return res.json("Lista de Usuários está Vazia");
     }
@@ -65,4 +65,52 @@ module.exports = {
     }
     return res.json(Usuario);
   },
+
+  async updateAvaliacao(req, res) {
+    const {providerId, clienteId, chamadoId, vote} = req.body
+
+    const provider = await User.findById(providerId);
+    const cliente = await User.findById(clienteId);
+    const chamado = await Chamado.findById(chamadoId);
+
+    if(!provider || !cliente || !chamado) 
+      return res.status(400).
+      json("O cliente, proverdor ou chamado não existe, tente outros id's");
+
+    let data = provider.avaliacao;
+    provider.avaliacao = [...data, {
+      cliente: clienteId,
+      vote: vote
+    }]
+
+    await provider.save();
+
+    chamado.avaliado = true;
+    await chamado.save();
+
+    return res.json("Voto realizado com sucesso!");
+  },
+
+  async updateUser(req, res) {
+    const { name, cpf, password, address, number, typeuser } = req.body
+    const { id } = req.params;
+
+    const usr = await User.findById(id);
+    
+    if(!usr) 
+      return res.status(400).
+      json("Usuario nao encontrado, tente outro id!");
+
+    usr.name = name;
+    usr.cpf = cpf;
+    usr.password = password;
+    usr.address = address;
+    usr.number = number;
+    usr.typeuser = typeuser;
+
+    await usr.save();
+
+    return res.json("Usuario atualizado com sucesso!");
+
+  }
 }

@@ -20,13 +20,18 @@ routes.post('/users', UserController.store);
 routes.get('/users', UserController.index);
 // Obtem um usuario pelo id
 routes.get('/users/:id', UserController.show);
-//Deletar Usuarios
+// Realiza a avaliação de um usuario do tipo prestador;
+routes.put('/users/avaliacao', UserController.updateAvaliacao);
+// Atualiza um usuario
+routes.put('/users/:id', UserController.updateUser);
+//Deletar Usuarios por CPF
 routes.delete('/users/:cpf', UserController.destroy);
 
 // Cadastro de Servico 
 routes.get('/services', ServiceController.index);
 routes.get('/services/:id', ServiceController.show);
 routes.post('/services', upload.single('imageService') , ServiceController.storage);
+routes.put('/services/:id', upload.single('imageService'), ServiceController.update);
 routes.delete('/services/:id', ServiceController.destroy);
 
 // Cadastro de Chamado
